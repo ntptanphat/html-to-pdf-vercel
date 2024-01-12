@@ -1,25 +1,18 @@
 const fetch = require('node-fetch');
 const fs = require("fs");
-const chromium = require('@sparticuz/chromium-min');
-const puppeteer = require("puppeteer-core");
 
-async function getBrowser() {
-  return puppeteer.launch({
-    args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
-    defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath(
-      `https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar`
-    ),
-    headless: chromium.headless,
-    ignoreHTTPSErrors: true,
-  });
-}
+const chrome = require('chrome-aws-lambda');
+const puppeteer = require('puppeteer-core');
 
 exports.hello_world = async (req, res) => res.send('Hello World 2');
 exports.test_post = async (req, res) => res.send('Test Post');
 
 exports.generate_pdf = async (req, res) => {
-  let browser = await getBrowser(); 
+  const browser = await puppeteer.launch({
+    args: chrome.args,
+    executablePath: await chrome.executablePath,
+    headless: chrome.headless,
+  });
   const page = await browser.newPage();
   const html = await `${fs.readFileSync(`./dummy.html`, "utf8")}`;
   await page.setContent(html, { waitUntil: "domcontentloaded" });
