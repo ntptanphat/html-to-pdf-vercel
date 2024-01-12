@@ -24,5 +24,8 @@
     "express": "^4.17.1",
     "node-fetch": "^2.6.5",
     "puppeteer-core": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17"
   }
 }
