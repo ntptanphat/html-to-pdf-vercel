@@ -2,9 +2,9 @@ const fetch = require('node-fetch');
 const fs = require("fs");
 const chrome = require("chrome-aws-lambda");
 const puppeteer = require("puppeteer-core");
-var cors = require('cors')
 
 exports.hello_world = async (req, res) => res.send('Hello World');
+exports.test_post = async (req, res) => res.send('Test Post');
 
 exports.generate_pdf = async (req, res) => {
   const options = {
