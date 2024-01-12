@@ -1,11 +1,13 @@
 const fetch = require('node-fetch');
 const fs = require("fs");
 
+let chrome = {};
 let puppeteer;
 
 if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
   // running on the Vercel platform.
-  puppeteer = require('@pipedream/browsers');
+  chrome = require('chrome-aws-lambda');
+  puppeteer = require('puppeteer-core');
 } else {
   // running locally.
   puppeteer = require('puppeteer');
@@ -15,7 +17,13 @@ if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
 exports.hello_world = async (req, res) => res.send('Hello World');
 
 exports.generate_pdf = async (req, res) => {
-  const browser = await puppeteer.launch({ headless: true });
+  let browser = await puppeteer.launch({
+    args: [...chrome.args, '--hide-scrollbars', '--disable-web-security'],
+    defaultViewport: chrome.defaultViewport,
+    executablePath: await chrome.executablePath,
+    headless: true,
+    ignoreHTTPSErrors: true,
+  });
   const page = await browser.newPage();
   const html = await `${fs.readFileSync(`./dummy.html`, "utf8")}`;
   await page.setContent(html, { waitUntil: "domcontentloaded" });
@@ -37,7 +45,13 @@ exports.generate_pdf = async (req, res) => {
 };
 
 exports.generate_pdf_html = async (req, res) => {
-  const browser = await puppeteer.launch({ headless: true });
+  let browser = await puppeteer.launch({
+    args: [...chrome.args, '--hide-scrollbars', '--disable-web-security'],
+    defaultViewport: chrome.defaultViewport,
+    executablePath: await chrome.executablePath,
+    headless: true,
+    ignoreHTTPSErrors: true,
+  });
   // Create a new page
   const page = await browser.newPage();
 
@@ -70,7 +84,13 @@ exports.generate_pdf_html = async (req, res) => {
 
 
 exports.generate_pdf_with_css = async (req, res) => { 
-  const browser = await puppeteer.launch({ headless: true });
+  let browser = await puppeteer.launch({
+    args: [...chrome.args, '--hide-scrollbars', '--disable-web-security'],
+    defaultViewport: chrome.defaultViewport,
+    executablePath: await chrome.executablePath,
+    headless: true,
+    ignoreHTTPSErrors: true,
+  });
   const page = await browser.newPage();
   const logo_url = "https://programatically.com/file/2021/10/Nginx-Docker-BG.webp";
 
