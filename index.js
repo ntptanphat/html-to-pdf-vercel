@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const service = require('./service');
+const cors = require('cors');
 
 const options = [
     cors({
