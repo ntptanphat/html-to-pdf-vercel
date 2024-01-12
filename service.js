@@ -3,7 +3,7 @@ const fs = require("fs");
 const chrome = require("chrome-aws-lambda");
 const puppeteer = require("puppeteer-core");
 
-exports.hello_world = async (req, res) => res.send('Hello World');
+exports.hello_world = async (req, res) => res.send('Hello World 2');
 exports.test_post = async (req, res) => res.send('Test Post');
 
 exports.generate_pdf = async (req, res) => {
