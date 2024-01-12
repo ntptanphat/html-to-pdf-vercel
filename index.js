@@ -9,7 +9,7 @@ app.use(express.json());
 
 app.get("/test", service.hello_world);
 app.post("/test-post", service.test_post);
-// app.post("/pdf", service.generate_pdf);
+app.post("/pdf", service.generate_pdf);
 // app.post("/pdf-html", service.generate_pdf_html);
 // app.post("/pdf-with-css", service.generate_pdf_with_css);
 
