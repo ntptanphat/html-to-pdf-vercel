@@ -1,29 +1,36 @@
 const fetch = require('node-fetch');
 const fs = require("fs");
+const chrome = require("chrome-aws-lambda");
+const puppeteer = require("puppeteer-core");
 
-let chrome = {};
-let puppeteer;
-
-if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-  // running on the Vercel platform.
-  chrome = require('chrome-aws-lambda');
-  puppeteer = require('puppeteer-core');
-} else {
-  // running locally.
-  puppeteer = require('puppeteer');
-}
-
+const getBrowser = async () => {
+  try { 
+    const executablePath = await chromium.executablePath;
+    if (executablePath === null) {
+      // running locally
+      const puppeteer = require('puppeteer');
+      return puppeteer.launch({
+        headless: true,
+        ignoreHTTPSErrors: true
+      });
+    } else {
+      // running on vercel
+      return chromium.puppeteer.launch({
+        args: chromium.args,
+        executablePath,
+        headless: chromium.headless,
+        ignoreHTTPSErrors: true
+      });
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 exports.hello_world = async (req, res) => res.send('Hello World');
 
 exports.generate_pdf = async (req, res) => {
-  let browser = await puppeteer.launch({
-    args: [...chrome.args, '--hide-scrollbars', '--disable-web-security'],
-    defaultViewport: chrome.defaultViewport,
-    executablePath: await chrome.executablePath,
-    headless: true,
-    ignoreHTTPSErrors: true,
-  });
+  const browser = await getBrowser();
   const page = await browser.newPage();
   const html = await `${fs.readFileSync(`./dummy.html`, "utf8")}`;
   await page.setContent(html, { waitUntil: "domcontentloaded" });
@@ -45,13 +52,8 @@ exports.generate_pdf = async (req, res) => {
 };
 
 exports.generate_pdf_html = async (req, res) => {
-  let browser = await puppeteer.launch({
-    args: [...chrome.args, '--hide-scrollbars', '--disable-web-security'],
-    defaultViewport: chrome.defaultViewport,
-    executablePath: await chrome.executablePath,
-    headless: true,
-    ignoreHTTPSErrors: true,
-  });
+  const browser = await getBrowser();
+
   // Create a new page
   const page = await browser.newPage();
 
@@ -84,13 +86,8 @@ exports.generate_pdf_html = async (req, res) => {
 
 
 exports.generate_pdf_with_css = async (req, res) => { 
-  let browser = await puppeteer.launch({
-    args: [...chrome.args, '--hide-scrollbars', '--disable-web-security'],
-    defaultViewport: chrome.defaultViewport,
-    executablePath: await chrome.executablePath,
-    headless: true,
-    ignoreHTTPSErrors: true,
-  });
+  const browser = await getBrowser();
+
   const page = await browser.newPage();
   const logo_url = "https://programatically.com/file/2021/10/Nginx-Docker-BG.webp";
 
