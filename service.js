@@ -12,7 +12,6 @@ exports.generate_pdf = async (req, res) => {
     defaultViewport: chrome.defaultViewport,
     executablePath: await chrome.executablePath,
     headless: true,
-    ignoreHTTPSErrors: true,
  };
   let browser = await puppeteer.launch(options); 
   const page = await browser.newPage();
