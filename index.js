@@ -2,6 +2,16 @@ const express = require('express');
 const app = express();
 const service = require('./service');
 
+const options = [
+    cors({
+      origin: '*',
+      methods: '*',
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      credentials: true,
+    })
+  ];
+
+app.use(options);
 app.use(express.json());
 
 
