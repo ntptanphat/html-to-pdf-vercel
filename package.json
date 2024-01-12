@@ -19,10 +19,9 @@
   },
   "homepage": "https://github.com/DaniyalAkbar/html_to_pdf_puppeteer#readme",
   "dependencies": {
-    "chrome-aws-lambda": "^6.0.0",
+    "chrome-aws-lambda": "^10.1.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mitt": "^3.0.1",
     "node-fetch": "^2.6.5",
     "puppeteer-core": "^21.7.0"
   },
