@@ -3,6 +3,8 @@ var cors = require('cors')
 const app = express();
 const service = require('./service');
 
+const PORT = process.env.PORT || 3000;
+
 app.use(cors())
 app.use(express.json());
 
@@ -14,6 +16,6 @@ app.post("/pdf-html", service.generate_pdf_html);
 // app.post("/pdf-with-css", service.generate_pdf_with_css);
 
 
-app.listen(3000, ()=> {
+app.listen(PORT, ()=> {
     console.log(`project running on port 3000`);
 });
