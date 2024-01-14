@@ -1,18 +1,12 @@
-const fetch = require('node-fetch');
 const fs = require("fs");
-
-const chrome = require('chrome-aws-lambda');
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 
 exports.hello_world = async (req, res) => res.send('Hello World 2');
 exports.test_post = async (req, res) => res.send('Test Post');
 
 exports.generate_pdf = async (req, res) => {
-  const browser = await puppeteer.launch({
-    args: chrome.args,
-    executablePath: await chrome.executablePath,
-    headless: chrome.headless,
-  });
+  // Create a browser instance
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
   const html = await `${fs.readFileSync(`./dummy.html`, "utf8")}`;
   await page.setContent(html, { waitUntil: "domcontentloaded" });
@@ -32,34 +26,28 @@ exports.generate_pdf = async (req, res) => {
   res.send(pdf);  
 };
 
-// exports.generate_pdf_html = async (req, res) => {
-//   const options = {
-//     args: [...chrome.args, "--hide-scrollbars", "--disable-web-security", '--font-render-hinting=none'],
-//     defaultViewport: chrome.defaultViewport,
-//     executablePath: await chrome.executablePath,
-//     headless: true,
-//     ignoreHTTPSErrors: true,
-//  };
-//   let browser = await puppeteer.launch(options); 
+exports.generate_pdf_html = async (req, res) => {
+   // Create a browser instance
+   const browser = await puppeteer.launch();
 
-//   const page = await browser.newPage();
+  const page = await browser.newPage();
 
-//   const website_url = 'https://main.d1vkma8fugi4mi.amplifyapp.com/pdf'; 
+  const website_url = 'https://main.d1vkma8fugi4mi.amplifyapp.com/pdf'; 
 
-//   await page.goto(website_url, { waitUntil: 'networkidle0' }); 
-//   await page.goto(website_url);
-//   await page.emulateMediaType('screen');
+  await page.goto(website_url, { waitUntil: 'networkidle0' }); 
+  await page.goto(website_url);
+  await page.emulateMediaType('screen');
 
-//   const pdf = await page.pdf({
-//     format: "A4",
-//     printBackground: true,
-//     preferCSSPageSize: true,
-//     margin: { top: '50px', right: '50px', bottom: '50px', left: '50px' },
-//   });
+  const pdf = await page.pdf({
+    format: "A4",
+    printBackground: true,
+    preferCSSPageSize: true,
+    margin: { top: '50px', right: '50px', bottom: '50px', left: '50px' },
+  });
 
-//   await browser.close();
+  await browser.close();
 
-//   res.contentType("application/pdf");
-//   res.send(pdf);  
-// };
+  res.contentType("application/pdf");
+  res.send(pdf);  
+};
 
