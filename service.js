@@ -6,7 +6,18 @@ exports.test_post = async (req, res) => res.send('Test Post');
 
 exports.generate_pdf = async (req, res) => {
   // Create a browser instance
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: [
+      "--disable-setuid-sandbox",
+      "--no-sandbox",
+      "--single-process",
+      "--no-zygote",
+    ],
+    executablePath:
+      process.env.NODE_ENV === "production"
+        ? process.env.PUPPETEER_EXECUTABLE_PATH
+        : puppeteer.executablePath(),
+  });
   const page = await browser.newPage();
   const html = await `${fs.readFileSync(`./dummy.html`, "utf8")}`;
   await page.setContent(html, { waitUntil: "domcontentloaded" });
@@ -28,7 +39,18 @@ exports.generate_pdf = async (req, res) => {
 
 exports.generate_pdf_html = async (req, res) => {
    // Create a browser instance
-   const browser = await puppeteer.launch();
+   const browser = await puppeteer.launch({
+    args: [
+      "--disable-setuid-sandbox",
+      "--no-sandbox",
+      "--single-process",
+      "--no-zygote",
+    ],
+    executablePath:
+      process.env.NODE_ENV === "production"
+        ? process.env.PUPPETEER_EXECUTABLE_PATH
+        : puppeteer.executablePath(),
+  });
 
   const page = await browser.newPage();
 
